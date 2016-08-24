@@ -1,0 +1,97 @@
+<!-- ***********
+Project Name: shipping_calculator
+File Name: index.html
+Author: Lance Takiguchi
+Date: 08/23/2016 Time: 17:54
+Objective: Practice html with a shipping calculator
+
+ *********** -->
+
+<!doctype html>
+<html>
+<head>
+    <script>
+        //****** Global Variables ******
+        var shipping_time = 5; //** Holds current shipping time .Set to 5 days default **
+
+        // ** Purpose: Will add event handlers to all of the appropriate elements **
+
+        apply_event_handler = function(){
+            $("#weight_input").on("keypress", validate_keydown(event));
+            $(".days_to_ship").click(change_shipping_type);
+            $("#calculate_button").click(display_shipping)
+        };
+
+        // ** Purpose: Checks the incoming values to see if it is a number or not **
+        validate_keydown = function(current_input){
+            return current_input.which == 46 || (current_input.which >= 48 && current_input.which <= 57);
+        };
+
+        //** Purpose: Update the stored value for the shipping based on the clicked radio button **
+        change_shipping_type = function(){
+            shipping_time = $('input[name="days_to_ship"]:checked').val();
+        };
+
+        //** Purpose: Process the shipping time and weight, return an object with the info **
+        change_shipping = function (weight, shipping_time) {
+            var arrival_date = ""; //** final arrival date
+            var cost; //** final shipping cost
+            var charge; //** cost per ounce
+            var OUNCES_PER_POUND = 16; //**Constant. Here in case it is changed
+
+            weight *= OUNCES_PER_POUND; //covert pounds into ounces
+
+            //*** Calculate Cost ***
+            if(weight < 20){
+                charge = 2;
+            }
+            else if(weight > OUNCES_PER_POUND*2){
+                charge = 20;
+            }
+            else{
+                charge = 10;
+            }
+
+
+            cost = weight * charge; //TODO: Include shipping speed multiplier
+        };
+
+        display_shipping = function () {
+        };
+
+    </script>
+
+    <style>
+        label{
+            display: block;
+        }
+        #display_shipping_calculation{
+            border: solid black 2px;
+            height: 400px;
+            width: 400px;
+
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <input id="weight_input" type="text" placeholder="weight of package in pounds" size="25">
+
+    <label>
+        <input class="days_to_ship"  type="radio" name="days_to_ship" value="5" checked="checked"> 5 day
+    </label>
+    <label>
+        <input class="days_to_ship"  type="radio" name="days_to_ship" value="3"> 3 day
+    </label>
+    <label>
+        <input class="days_to_ship"  type="radio" name="days_to_ship" value="2"> 2 day
+    </label>
+
+    <button id="calculate_button"> Calculate </button>
+
+    <!-- Purpose: display the shipping information of the package -->
+    <div id="display_shipping_calculation">  </div>
+</body>
+
+</html>
