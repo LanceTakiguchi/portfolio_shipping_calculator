@@ -4,7 +4,7 @@ File Name: index.html
 Author: Lance Takiguchi
 Date: 08/23/2016 Time: 17:54
 Objective: Practice html with a shipping calculator
-
+Prompt: https://github.com/Learning-Fuze/shipping_calculator
  *********** -->
 
 <!doctype html>
@@ -16,7 +16,7 @@ Objective: Practice html with a shipping calculator
 
         // ** Purpose: Will add event handlers to all of the appropriate elements **
 
-        apply_event_handler = function(){
+        apply_event_handler = function(){ //TODO: Fix the jQuery events to work!!! grrrrrr
             $("#weight_input").on("keypress", validate_keydown(event));
             $(".days_to_ship").click(change_shipping_type);
             $("#calculate_button").click(display_shipping);
