@@ -19,7 +19,7 @@ Objective: Practice html with a shipping calculator
         apply_event_handler = function(){
             $("#weight_input").on("keypress", validate_keydown(event));
             $(".days_to_ship").click(change_shipping_type);
-            $("#calculate_button").click(display_shipping)
+            $("#calculate_button").click(display_shipping);
         };
 
         // ** Purpose: Checks the incoming values to see if it is a number or not **
@@ -87,7 +87,19 @@ Objective: Practice html with a shipping calculator
         display_shipping = function (){
             var output = calculate_shipping(document.getElementById('textbox_id').value, shipping_time);
 
-            document.getElementById("ounce").innerHTML = output
+            document.getElementById("ounce").innerHTML = output.weight;
+            var weight_pounds = parseInt(output.weight) / 16;
+            document.getElementById("ounce").innerHTML = weight_pounds.toString();
+
+
+            document.getElementById("day").innerHTML = shipping_time.toString();
+            var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var today = new Date();
+            var today_string = month[today.getMonth()] + " " + today.getDate() + ", " + today.getFullYear(); //TODO: Better to make a date/string making function
+            document.getElementById("departing").innerHTML = today_string;
+            document.getElementById("arriving").innerHTML = output.arrival_date;
+
+            document.getElementById("cost").innerHTML = "Cost: $" + output.cost;
         };
 
     </script>
@@ -135,7 +147,7 @@ Objective: Practice html with a shipping calculator
                 <li id="departing"></li>
                 <li id="arriving"></li>
             </ul>
-            <li>Cost:</li>
+            <li id="cost">Cost:</li>
         </ul>
     </div>
 </body>
