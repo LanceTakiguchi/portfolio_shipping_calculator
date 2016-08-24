@@ -33,12 +33,16 @@ Objective: Practice html with a shipping calculator
         };
 
         //** Purpose: Process the shipping time and weight, return an object with the info **
-        change_shipping = function (weight, shipping_time) {
-            var arrival_date = ""; //** final arrival date
+        calculate_shipping = function (weight, shipping_time) {
             var cost; //** final shipping cost
             var charge; //** cost per ounce
             var OUNCES_PER_POUND = 16; //**Constant. Here in case it is changed
+            var shipping_speed_multiplier; //** Changes depending on how fast the shipping speed it
 
+            var arrival_date = new Date();//** Today's date to be set to day to arrive
+            var days_from_now; //** 2, 3, 5 days from day it is shipped
+            var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var date_string;
             weight *= OUNCES_PER_POUND; //covert pounds into ounces
 
             //*** Calculate Cost ***
@@ -52,11 +56,38 @@ Objective: Practice html with a shipping calculator
                 charge = 10;
             }
 
+            if(shipping_time == 5){
+                shipping_speed_multiplier = 1;
+            }
+            else if(shipping_time == 3){
+                shipping_speed_multiplier = 1.5;
+            }
+            else{
+                shipping_speed_multiplier = 2;
+            }
 
-            cost = weight * charge; //TODO: Include shipping speed multiplier
+            //** Final cost equation
+            cost = (weight * charge)*shipping_speed_multiplier;
+
+            //*** Calculate Arrival Date ***
+            if(arrival_date.getDay() == 0){ //** Check to see if today is Sunday. If so, add a day
+                arrival_date.setDate(arrival_date.getDate() + days_from_now + 1);
+            }else{
+                arrival_date.setDate(arrival_date.getDate() + days_from_now);
+                if(arrival_date.getDay() == 0){ //**Check if arrive day would have been Sunday, if so, add a day
+                    arrival_date.setDate(arrival_date.getDate() + 1);
+                }
+            }
+            date_string = month[arrival_date.getMonth()] + " " + arrival_date.getDate() + ", " + arrival_date.getFullYear();
+
+            return {arrival_date: date_string, weight: weight, cost: cost}
         };
 
-        display_shipping = function () {
+        //** Purpose: Call caluculate shipping function, and display the results in the display div
+        display_shipping = function (){
+            var output = calculate_shipping(document.getElementById('textbox_id').value, shipping_time);
+
+            document.getElementById("ounce").innerHTML = output
         };
 
     </script>
@@ -91,7 +122,22 @@ Objective: Practice html with a shipping calculator
     <button id="calculate_button"> Calculate </button>
 
     <!-- Purpose: display the shipping information of the package -->
-    <div id="display_shipping_calculation">  </div>
+    <div id="display_shipping_calculation">
+        <ul>
+            <li>Weight:</li>
+            <ul>
+                <li id="ounce"></li>
+                <li id="pounds"></li>
+            </ul>
+            <li>Shipping:</li>
+            <ul>
+                <li id="day"></li>
+                <li id="departing"></li>
+                <li id="arriving"></li>
+            </ul>
+            <li>Cost:</li>
+        </ul>
+    </div>
 </body>
 
 </html>
